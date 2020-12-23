@@ -1,5 +1,6 @@
 *.pyc
 **/migrations/
+.env
 
 admin/db.sqlite3
 main/app.db

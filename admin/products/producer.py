@@ -1,7 +1,9 @@
 import pika
 import json
 
-params = pika.URLParameters('amqps://cyqkzrcg:nN77aHPNXDkyJO7_7Xr57ytSB4Qx4itt@vulture.rmq.cloudamqp.com/cyqkzrcg')
+from django.conf import settings
+
+params = pika.URLParameters(settings.AMQP_URI)
 
 connection = pika.BlockingConnection(params)
 

@@ -2,8 +2,9 @@ import pika
 import json
 import requests
 
+from config import Config
 
-params = pika.URLParameters('amqps://cyqkzrcg:nN77aHPNXDkyJO7_7Xr57ytSB4Qx4itt@vulture.rmq.cloudamqp.com/cyqkzrcg')
+params = pika.URLParameters(Config.AMQP_URI)
 
 connection = pika.BlockingConnection(params)
 
