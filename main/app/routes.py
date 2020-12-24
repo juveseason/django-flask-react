@@ -1,8 +1,11 @@
-from flask import jsonify, request
+import requests
+from flask import jsonify, request, abort
 from app import app, db
-from app.models import Product
+from app.models import Product, ProductUser
+from config import Config
+from producer import publish
 
-@app.route('/api/products')
+@app.route('/api/products', methods=['GET'])
 def list_products():
     data = db.session.query(Product).all()
     return jsonify(data)
@@ -36,3 +39,21 @@ def delete_product(id):
     db.session.commit()
     print('Product Deleted')
     return jsonify(product)
+
+@app.route('/api/products/<int:id>/like', methods=['POST'])
+def like(id):
+    req = requests.get(f'http://{Config.DOCKER_LOCALHOST}:8000/api/user')
+    json = req.json()
+
+    try:
+        productUser = ProductUser(user_id=json['id'], product_id=id)
+        db.session.add(productUser)
+        db.session.commit()
+
+        publish('product_liked', id)
+    except:
+        abort(400, 'You already liked this product')
+
+    return jsonify({
+        'message': 'success'
+    })

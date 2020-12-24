@@ -28,10 +28,16 @@ class ProductViewSet(viewsets.ViewSet):
 
     def update(self, request, pk=None): # PUT /api/products/<str:id>
         product = Product.objects.get(id=pk)
-        serializer = ProductSerializer(instance=product, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        publish('product_updated', serializer.data)
+        if 'likes' in request.data and 'title' not in request.data:
+            product.likes += 1
+            product.save()
+            serializer = ProductSerializer(product)
+            print('Product likes increased!')
+        else:
+            serializer = ProductSerializer(instance=product, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            publish('product_updated', serializer.data)
         return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
     def destroy(self, request, pk=None): # DELETE /api/products/<str:id>

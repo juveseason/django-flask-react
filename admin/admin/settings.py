@@ -29,7 +29,12 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+DOCKER_LOCALHOST = os.getenv('DOCKER_LOCALHOST')
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    DOCKER_LOCALHOST,
+]
 
 
 # Application definition

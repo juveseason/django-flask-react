@@ -11,3 +11,7 @@ class Config(object):
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     AMQP_URI = os.getenv('AMQP_URI')
+
+    # https://stackoverflow.com/questions/62002249/docker-container-sending-request-to-http
+    # M1 Mac use linux answer
+    DOCKER_LOCALHOST = os.getenv('DOCKER_LOCALHOST')

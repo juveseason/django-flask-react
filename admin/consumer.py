@@ -1,4 +1,8 @@
-import pika
+import pika, json, os, django
+import requests
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "admin.settings")
+django.setup()
 
 from django.conf import settings
 
@@ -12,7 +16,11 @@ channel.queue_declare(queue='admin')
 
 def callback(ch, method, properties, body):
     print('Received in admin')
-    print(body)
+    id = json.loads(body)
+    print(id)
+    with requests.Session() as s:
+        endpoint = f'http://{settings.DOCKER_LOCALHOST}:8000/api/products/{id}'
+        s.put(endpoint, json={'likes': 1})
 
 channel.basic_consume(queue='admin', on_message_callback=callback, auto_ack=True)
 
