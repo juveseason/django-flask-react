@@ -4,3 +4,5 @@
 
 admin/db.sqlite3
 main/app.db
+
+/node_modules
